@@ -44,7 +44,10 @@ snowpark_df = session.table("COVID19_RECORDS")
 print(type(snowpark_df) # snowflake.snowpark.table.Table
 print(f"Size of the table object: {(sys.getsizeof(snowpark_df)/1e6)} MB")
 #'Size of the table object: 4.8e-05 MB'
+```
 Above snowpark_df is a lazily-evaluated table; hence It won't consume much memory like pandas data frames. But we can apply any transformations aggregations and much more as we did with pandas.
+
+``` python 
 snowpark_df.schema.fields
 
 # [StructField('USMER', LongType(), nullable=True),
@@ -109,7 +112,10 @@ import snowflake.snowpark.functions as F
 
 snowpark_df.with_column('TARGET', F.when(F.col('CLASIFFICATION_FINAL')
                         < 4, 1).otherwise(0))
+```
 Let's see our target distribution.
+
+``` python 
 snowpark_df\
 .group_by("TARGET").count().to_pandas().set_index("TARGET")\
 .plot.bar()
@@ -123,7 +129,11 @@ snowpark_df\
 
 plt.title("Age distribution",fontweight='semibold')
 plt.show()
+```
+
 Let's find the relationship between the Age variable and the target variable.
+
+``` python 
 snowpark_df = snowpark_df.with_column(
     "AGE_BKT",
     F.when(F.col("AGE") < 21, "YOUNG").otherwise(
