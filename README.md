@@ -498,7 +498,7 @@ feature_coefficients\
 .bar(y='FeatImportance', figsize=(12,5))
 plt.show()
 ```
-![Feature importance](images/model%20disgonostics.png)
+![Feature importance](images/modeldisgonostics.png)
 
 We can define the UDF as follows. This function is similar to the previous one.
 
