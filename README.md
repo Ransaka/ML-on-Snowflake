@@ -119,7 +119,7 @@ snowpark_df.with_column('TARGET', F.when(F.col('CLASIFFICATION_FINAL')
 ```
 Let's see our target distribution.
 
-![Target Ditribution](images/target dist.png)
+![Target distribution](images\target_dist.png)
 
 ``` python 
 snowpark_df\
@@ -128,7 +128,10 @@ snowpark_df\
 
 plt.title("Target distribution",fontweight='semibold')
 plt.show()
+```
 Let's create one more plot.
+
+``` python 
 snowpark_df\
 .select('AGE').to_pandas()\
 .plot.hist(bins=100,alpha=0.5)
@@ -136,6 +139,7 @@ snowpark_df\
 plt.title("Age distribution",fontweight='semibold')
 plt.show()
 ```
+![Age distribution](images/age_dist.png)
 
 Let's find the relationship between the Age variable and the target variable.
 
@@ -201,7 +205,11 @@ We can train the model locally, upload it to a stage and load it from the stage 
 We can define SPROC, which can train the model and save the trained model into the Snowflake stage when the SPROC is called. Here we'll need a separate UDF for the inferencing part.
 
 In this article, we will explore both methods above.
-Train the model locally, upload it to a stage and load it from the stage
+
+## Train the model locally, upload it to a stage and load it from the stage
+
+![Method 01](images/method1.png)
+
 First, we have to define the function for training the model locally.
 
 ``` python 
@@ -347,8 +355,12 @@ from
 limit
     100;
 ```
-Define train and inferencing procs/UDFs
+## Define train and inferencing procs/UDFs
+
 This method will create a stored procedure for training the model and UDF for inferencing the model. You may refer to the diagram below for more insights.
+
+![Method 02](images/method2.png)
+
 Let's define the stored procedure. At first, we will implement the Python function, and we can convert it to the Snowflake stored procedure in later steps.
 
 ``` python 
@@ -394,7 +406,11 @@ def train_dt_procedure(
         "/tmp/" + model_name, "@ML_MODELS", auto_compress=False, overwrite=True
     )
     return feat_importance
+```
+
 Let's register the above Python function as a stored procedure.
+
+``` python 
 sproc_train_dt_model = session.sproc.register(
                     func=train_dt_procedure, 
                     name='sproc_train_dt_model', 
@@ -482,6 +498,7 @@ feature_coefficients\
 .bar(y='FeatImportance', figsize=(12,5))
 plt.show()
 ```
+![Feature importance](images/model%20disgonostics.png)
 
 We can define the UDF as follows. This function is similar to the previous one.
 
@@ -547,5 +564,8 @@ FROM
     COVID19_RECORDS_PROCESSED limit 100;
 ```
 ## Conclusion
-While snowpark offers a comprehensive platform for our machine learning tasks, it has a few issues at the time of writing this article. As an example, PyTorch still needs to be supported by a snowpark. Also, only selected packages are available in conda; if we want to use other packages, such as catboost, we must import them manually into our environment as described here.
-Thanks for reading! Connect with me on LinkedIn.
+While snowpark offers a comprehensive platform for our machine learning tasks, it has a [few issues](https://docs.snowflake.com/en/developer-guide/snowpark/python/python-snowpark-training-ml.html#limitations-and-known-issues) at the time of writing this article. As an example, PyTorch still needs to be supported by a snowpark. Also, only selected packages are available in conda; if we want to use other packages, such as catboost, we must import them manually into our environment as described [here](https://docs.snowflake.com/en/developer-guide/snowpark/python/creating-udfs.html#reading-files-from-a-udf).
+
+Thanks for reading! 
+
+Connect with me on [LinkedIn](https://www.linkedin.com/in/ransaka/).
