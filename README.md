@@ -1,13 +1,17 @@
-## Machine Learning on Snowflake
+# Machine Learning on Snowflake
 
-### snowflake is one of the leading data platforms out there. In this article, we will explore the capabilities of its' snowpark python library.
+### Snowflake is one of the leading data platforms out there. In this article, we will explore the capabilities of its' snowpark python library.
+
+![alt text](images/cover.png)
 
 Throughout this article, you will learn how to use,
 - snowpark-python functionalities for primary data preprocessing
 - Train and deploy machine learning models in Snowflake
 
 Define UDFs in a pythonic way and deploy them in snowflake
-Topics covered in this article | Image by authorIf you are willing to follow along with the tutorial, you should have an Anaconda integration-enabled snowflake account. Otherwise, you must sign up for a free snowflake trial account and configure it as described here.
+![Topics covered in this article](images/overview.png)
+
+If you are willing to follow along with the tutorial, you should have an Anaconda integration-enabled snowflake account. Otherwise, you must sign up for a free snowflake trial account and configure it as described here.
 At first glance, snowpark is a machine learning and data science framework that offers the power of SQL within Python flexibility. Sometimes, this is similar to the Apache spark framework. However, this provides a pervasive framework for our machine learning and data science projects. Before trying anything in this article, you should establish a connection between python and Snowflake. You can refer to my code repo for code samples. Let's create a database connection.
 
 ``` python 
@@ -114,6 +118,8 @@ snowpark_df.with_column('TARGET', F.when(F.col('CLASIFFICATION_FINAL')
                         < 4, 1).otherwise(0))
 ```
 Let's see our target distribution.
+
+![Target Ditribution](images/target dist.png)
 
 ``` python 
 snowpark_df\
